@@ -24,16 +24,25 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Horário de funcionamento
   const workingDays = ['segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado', 'domingo'];
-  const openHour = 18; // 22:00
-  const closeHour = 00;  // 00:00 (meia-noite)
+  const openHour = 18; // 18:00
+  const closeHour = 24; // 24:00 (meia-noite)
 
   // Função para verificar se a loja está aberta
   function isStoreOpen() {
     const now = new Date();
-    const day = now.toLocaleString('pt-BR', { weekday: 'long' }).toLowerCase(); // Nome do dia da semana em minúsculas
+    const day = now.toLocaleString('pt-BR', { weekday: 'long' }).toLowerCase();
     const hour = now.getHours();
+    const minutes = now.getMinutes();
 
-    return workingDays.includes(day) && hour >= openHour && hour < closeHour;
+    // Verifica se está dentro do horário de operação
+    if (workingDays.includes(day)) {
+      if (hour >= openHour && hour < closeHour) {
+        return true; // Está aberta
+      } else if (hour === closeHour && minutes === 0) {
+        return true; // Exatamente na hora de fechamento
+      }
+    }
+    return false; // Fora do horário de funcionamento
   }
 
   // Função para verificar horário de funcionamento e exibir alerta
@@ -58,6 +67,9 @@ document.addEventListener('DOMContentLoaded', function () {
       }).showToast();
     }
   }
+
+  checkStatus();
+  setInterval(checkStatus, 60000); // Atualiza a cada minuto
 
   checkStatus();
   setInterval(checkStatus, 60000); // Atualiza a cada minuto
