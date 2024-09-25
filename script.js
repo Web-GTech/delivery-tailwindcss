@@ -48,8 +48,8 @@ document.addEventListener('DOMContentLoaded', function () {
       Toastify({
         text: "A loja está fechada. Volte mais tarde!",
         duration: 6000,
-        gravity: "top", // `top` or `bottom`
-        position: "right", // `left`, `center`, or `right`
+        gravity: "top", // `top` ou `bottom`
+        position: "right", // `left`, `center`, ou `right`
         stopOnFocus: true,
         style: {
           background: "#ef4444",
@@ -188,4 +188,4 @@ document.addEventListener('DOMContentLoaded', function () {
     if (e.target === successModal) successModal.classList.add('hidden');
     if (e.target === alertModal) alertModal.classList.add('hidden');
   });
-});
+})
