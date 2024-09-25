@@ -24,8 +24,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Horário de funcionamento
   const workingDays = ['segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado', 'domingo'];
-  const openHour = 22; // 15:00
-  const closeHour = 00; // 22:00
+  const openHour = 15; // 15:00
+  const closeHour = 22; // 22:00
 
   // Função para verificar se a loja está aberta
   function isStoreOpen() {
@@ -41,8 +41,9 @@ document.addEventListener('DOMContentLoaded', function () {
     if (isStoreOpen()) {
       statusTarja.innerHTML = '<span class="bg-green-600 text-white px-4 py-1 rounded">Loja aberta</span>';
     } else {
+      // Altera a cor de fundo para vermelho quando a loja está fechada
       statusTarja.innerHTML = '<span class="bg-red-600 text-white px-4 py-1 rounded">Seg á Dom - 15:00 ás 22:00</span>';
-
+      
       // Exibe alerta usando Toastify
       Toastify({
         text: "A loja está fechada. Volte mais tarde!",
