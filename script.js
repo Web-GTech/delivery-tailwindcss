@@ -39,13 +39,11 @@ document.addEventListener('DOMContentLoaded', function () {
   // Função para verificar horário de funcionamento e exibir alerta
   function checkStatus() {
     if (isStoreOpen()) {
-      statusTarja.classList.remove("bg-red-500");
+      statusTarja.classList.remove("bg-red-500", "p-2", "mx-4", "rounded-lg");
       statusTarja.classList.add("bg-green-600", "p-2", "mx-4", "rounded-lg");
     } else {
-      statusTarja.classList.remove("bg-green-600");
+      statusTarja.classList.remove("bg-green-600", "p-2", "mx-4", "rounded-lg");
       statusTarja.classList.add("bg-red-500", "p-2", "mx-4", "rounded-lg");
-    }
-    
 
       // Exibe alerta de loja fechada
       Toastify({
