@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Horário de funcionamento
   const workingDays = ['segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado', 'domingo'];
-  const openHour = 15; // 22:00
+  const openHour = 18; // 22:00
   const closeHour = 00;  // 00:00 (meia-noite)
 
   // Função para verificar se a loja está aberta
