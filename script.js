@@ -6,19 +6,26 @@ document.addEventListener('DOMContentLoaded', function () {
   const cartItemsContainer = document.getElementById('cart-itens');
   const cartCountSpan = document.getElementById('cart-count');
   const cartTotalSpan = document.getElementById('cart-total');
-  const checkoutBtn = document.getElementById('finalize-order-btn');
+  const checkoutBtn = document.getElementById('checkout-btn');
   const successModal = document.getElementById('success-modal');
   const finalTotalSpan = document.getElementById('final-total');
+  const closeSuccessModal = document.getElementById('close-success-modal');
   const closeSuccessModalBtn = document.getElementById('close-success-modal-btn');
   const cartCountFooter = document.getElementById('cart-count-footer');
-  const paymentOptions = document.getElementById('payment-method');
+  const paymentOptions = document.getElementById('payment-options');
   const statusTarja = document.getElementById('status-tarja');
-  const workingHoursDisplay = document.getElementById('working-hours-display'); // Novo elemento para status de horário
+  const addressForm = document.getElementById('checkout-form');
+
+  // MODAL DE ALERTA
+  const alertModal = document.getElementById('alert-modal');
+  const alertMessage = document.getElementById('alert-message');
+  const closeAlertModalBtn = document.getElementById('close-alert-modal-btn');
+  const alertOkBtn = document.getElementById('alert-ok-btn');
 
   // Horário de funcionamento
   const workingDays = ['segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado', 'domingo'];
-  const openHour = 15; // 15:00
-  const closeHour = 22; // 22:00
+  const openHour = 22; // 15:00
+  const closeHour = 00; // 22:00
 
   // Função para verificar se a loja está aberta
   function isStoreOpen() {
@@ -32,20 +39,15 @@ document.addEventListener('DOMContentLoaded', function () {
   // Função para verificar horário de funcionamento e exibir alerta
   function checkStatus() {
     if (isStoreOpen()) {
-      statusTarja.classList.remove("bg-red-600");
-      statusTarja.classList.add("bg-green-600");
-      workingHoursDisplay.innerHTML = '<span class="bg-green-600 text-white px-4 py-1 rounded">Loja aberta</span>';
+      statusTarja.innerHTML.remove(bg-red-500);
     } else {
-      statusTarja.classList.remove("bg-green-600");
-      statusTarja.classList.add("bg-red-600");
-      workingHoursDisplay.innerHTML = '<span class="bg-red-600 text-white px-4 py-1 rounded">Seg á Dom - 15:00 às 22:00</span>';
-    
+      statusTarja.innerHTML.add('bg-green-600');
       // Exibe alerta usando Toastify
       Toastify({
         text: "A loja está fechada. Volte mais tarde!",
         duration: 6000,
-        gravity: "top", // top or bottom
-        position: "right", // left, center, or right
+        gravity: "top", // `top` or `bottom`
+        position: "right", // `left`, `center`, or `right`
         stopOnFocus: true,
         style: {
           background: "#ef4444",
@@ -62,14 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
     button.addEventListener('click', () => {
       const name = button.getAttribute('data-name');
       const price = parseFloat(button.getAttribute('data-price'));
-
-      // Verifica se o item já está no carrinho
-      const existingItem = cart.find(item => item.name === name);
-      if (existingItem) {
-        existingItem.quantity += 1; // Incrementa a quantidade
-      } else {
-        cart.push({ name, price, quantity: 1 }); // Adiciona novo item
-      }
+      cart.push({ name, price });
       updateCartDisplay();
     });
   });
@@ -79,11 +74,11 @@ document.addEventListener('DOMContentLoaded', function () {
     cartItemsContainer.innerHTML = '';
     cart.forEach((item, index) => {
       const li = document.createElement('li');
-      li.innerHTML = `<span>${item.name} - R$ ${item.price.toFixed(2)} (x${item.quantity})</span>
+      li.innerHTML = `<span>${item.name} - R$ ${item.price.toFixed(2)}</span>
         <button class="text-red-500 ml-2" onclick="removeFromCart(${index})">&times;</button>`;
       cartItemsContainer.appendChild(li);
     });
-    const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+    const total = cart.reduce((acc, item) => acc + item.price, 0);
     cartCountSpan.textContent = cart.length;
     cartTotalSpan.textContent = total.toFixed(2);
     cartCountFooter.textContent = cart.length;
@@ -103,6 +98,15 @@ document.addEventListener('DOMContentLoaded', function () {
   // Fecha o modal do carrinho
   closeModalBtn.addEventListener('click', () => {
     modal.classList.add('hidden');
+  });
+
+  // Fecha o modal do pedido finalizado
+  closeSuccessModal.addEventListener('click', () => {
+    successModal.classList.add('hidden');
+  });
+
+  closeSuccessModalBtn.addEventListener('click', () => {
+    successModal.classList.add('hidden');
   });
 
   // Função para mostrar alertas
@@ -144,9 +148,9 @@ document.addEventListener('DOMContentLoaded', function () {
       return;
     }
 
-    const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
-    const itemSummary = cart.map(item => `${item.name} - R$ ${item.price.toFixed(2)} (x${item.quantity})`).join('\n');
-    const message = `Resumo do pedido:\n\n${itemSummary}\n\nTotal: R$ ${total.toFixed(2)}\n\nEndereço: ${address}, ${bairro}, ${cidade}\n\nObrigado pela compra!`;
+    const total = cart.reduce((acc, item) => acc + item.price, 0);
+    const itemSummary = cart.map(item => `${item.name} - R$${item.price.toFixed(2)}`).join('\n');
+    const message = `Resumo do pedido:\n\n${itemSummary}\n\nTotal: R$${total.toFixed(2)}\n\nEndereço: ${address}, ${bairro}, ${cidade}\n\nObrigado pela compra!`;
 
     // Envia o resumo para o WhatsApp
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
@@ -165,6 +169,15 @@ document.addEventListener('DOMContentLoaded', function () {
     if (this.value === 'pix') {
       showAlert("Chave Pix: <strong>picpayultra@gmail.com</strong> <i class='fas fa-money-bill-wave text-green-400'></i>");
     }
+  });
+
+  // Fechar modal de alerta
+  closeAlertModalBtn.addEventListener('click', () => {
+    alertModal.classList.add('hidden');
+  });
+
+  alertOkBtn.addEventListener('click', () => {
+    alertModal.classList.add('hidden');
   });
 
   // Fecha o modal ao clicar fora dele
