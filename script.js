@@ -25,43 +25,33 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Horário de funcionamento
   const workingDays = ['segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado', 'domingo'];
-  const openHour = 15; // 15:00
+  const openHour = 18; // 18:00
   const closeHour = 22; // 22:00
 
   // Função para verificar se a loja está aberta
- // Função para verificar se o horário atual está dentro do horário de funcionamento
-function verificarHorario() {
-  const agora = new Date();
-  const diaDaSemana = agora.getDay(); // 0 (Domingo) a 6 (Sábado)
-  const horaAtual = agora.getHours();
-  const minutoAtual = agora.getMinutes();
+  function verificarHorario() {
+    const agora = new Date();
+    const diaDaSemana = agora.getDay(); // 0 (Domingo) a 6 (Sábado)
+    const horaAtual = agora.getHours();
 
-  // Horário de funcionamento: Seg a Dom das 18:00 as 22:00
-  const horaAbertura = 18; // 18:00
-  const horaFechamento = 22; // 22:00
+    // Verifica se estamos em um dia da semana (Seg a Dom) e dentro do horário de funcionamento
+    const aberto = (diaDaSemana >= 1 && diaDaSemana <= 5) || (diaDaSemana === 0 || diaDaSemana === 6);
+    const dentroHorario = horaAtual >= openHour && horaAtual < closeHour;
 
-  // Verifica se estamos em um dia da semana (Seg a Dom) e dentro do horário de funcionamento
-  const aberto = (diaDaSemana >= 1 && diaDaSemana <= 5) || (diaDaSemana === 0 || diaDaSemana === 6);
-  const dentroHorario = horaAtual >= horaAbertura && horaAtual < horaFechamento;
+    // Atualiza o background baseado no horário
+    if (aberto && dentroHorario) {
+      document.body.classList.remove('bg-gray-100'); // remove o fundo normal
+      document.body.classList.add('bg-green-200'); // muda para um fundo de aberto
+      statusTarja.innerText = 'Aberto';
+      statusTarja.classList.add('bg-green-600'); // fundo verde para aberto
+    } else {
+      document.body.classList.remove('bg-green-200'); // remove o fundo de aberto
+      document.body.classList.add('bg-red-200'); // muda para um fundo de fechado
+      statusTarja.innerText = 'Fechado';
+      statusTarja.classList.remove('bg-green-600'); // remove fundo verde
+      statusTarja.classList.add('bg-red-600'); // fundo vermelho para fechado
 
-  // Atualiza o background baseado no horário
-  if (aberto && dentroHorario) {
-    document.body.classList.remove('bg-gray-100'); // remove o fundo normal
-    document.body.classList.add('bg-green-200'); // muda para um fundo de aberto
-    document.getElementById('status-tarja').innerText = 'Aberto';
-    document.getElementById('status-tarja').classList.add('bg-green-600'); // fundo verde para aberto
-  } else {
-    document.body.classList.remove('bg-green-200'); // remove o fundo de aberto
-    document.body.classList.add('bg-red-200'); // muda para um fundo de fechado
-    document.getElementById('status-tarja').innerText = 'Fechado';
-    document.getElementById('status-tarja').classList.remove('bg-green-600'); // remove fundo verde
-    document.getElementById('status-tarja').classList.add('bg-red-600'); // fundo vermelho para fechado
-  }
-}
-
-// Chama a função ao carregar a página
-window.onload = verificarHorario;
-      // Exibe alerta usando Toastify
+      // Exibe alerta se a loja estiver fechada
       Toastify({
         text: "A loja está fechada. Volte mais tarde!",
         duration: 6000,
@@ -73,9 +63,14 @@ window.onload = verificarHorario;
         }
       }).showToast();
     }
+  }
 
-    // Verifica o status do restaurante
-    const isOpen = checkRestauranteOpen();
+  // Chama a função ao carregar a página
+  window.onload = verificarHorario;
+
+  // Função para verificar o status do restaurante
+  function checkStatus() {
+    const isOpen = verificarHorario();
     if (isOpen) {
       spanItem.classList.remove("bg-red-600");
       spanItem.classList.add("bg-green-600");
