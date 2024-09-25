@@ -39,9 +39,10 @@ document.addEventListener('DOMContentLoaded', function () {
   // Função para verificar horário de funcionamento e exibir alerta
   function checkStatus() {
     if (isStoreOpen()) {
-      statusTarja.innerHTML.remove(bg-red-500);
+      statusTarja.innerHTML = '<span class="bg-green-600 text-white px-4 py-1 rounded">Loja aberta</span>';
     } else {
-      statusTarja.innerHTML.add('bg-green-600');
+      statusTarja.innerHTML = '<span class="bg-red-600 text-white px-4 py-1 rounded">Seg á Dom - 15:00 ás 22:00</span>';
+
       // Exibe alerta usando Toastify
       Toastify({
         text: "A loja está fechada. Volte mais tarde!",
