@@ -33,18 +33,17 @@ document.addEventListener('DOMContentLoaded', function () {
     const day = now.toLocaleString('pt-BR', { weekday: 'long' }).toLowerCase(); // Nome do dia da semana em minúsculas
     const hour = now.getHours();
 
-    // Se a hora for menor que a hora de fechamento e maior ou igual à de abertura
     return workingDays.includes(day) && hour >= openHour && hour < closeHour;
   }
 
   // Função para verificar horário de funcionamento e exibir alerta
   function checkStatus() {
     if (isStoreOpen()) {
-      statusTarja.classList.remove("bg-red-500  px-4 py-1 rounded-lg mt-2");
-      statusTarja.classList.add("bg-green-600  px-4 py-1 rounded-lg mt-2");
+      statusTarja.classList.remove("bg-red-500");
+      statusTarja.classList.add("bg-green-600");
     } else {
-      statusTarja.classList.remove("bg-green-600  px-4 py-1 rounded-lg mt-2");
-      statusTarja.classList.add("bg-red-500  px-4 py-1 rounded-lg mt-2");
+      statusTarja.classList.remove("bg-green-600");
+      statusTarja.classList.add("bg-red-500");
 
       // Exibe alerta de loja fechada
       Toastify({
@@ -68,7 +67,18 @@ document.addEventListener('DOMContentLoaded', function () {
     button.addEventListener('click', () => {
       const name = button.getAttribute('data-name');
       const price = parseFloat(button.getAttribute('data-price'));
-      cart.push({ name, price });
+
+      // Verifica se o item já está no carrinho
+      const existingItem = cart.find(item => item.name === name);
+
+      if (existingItem) {
+        // Incrementa a quantidade do item existente
+        existingItem.quantity++;
+      } else {
+        // Adiciona novo item ao carrinho com quantidade 1
+        cart.push({ name, price, quantity: 1 });
+      }
+
       updateCartDisplay();
     });
   });
@@ -78,15 +88,15 @@ document.addEventListener('DOMContentLoaded', function () {
     cartItemsContainer.innerHTML = '';
     cart.forEach((item, index) => {
       const li = document.createElement('li');
-      li.innerHTML = `<span>${item.name} - R$ ${item.price.toFixed(2)}</span>
+      li.innerHTML = `<span>${item.name} (${item.quantity}x) - R$ ${(item.price * item.quantity).toFixed(2)}</span>
         <button class="text-red-500 ml-2" onclick="removeFromCart(${index})">&times;</button>`;
       cartItemsContainer.appendChild(li);
     });
 
-    const total = cart.reduce((acc, item) => acc + item.price, 0);
-    cartCountSpan.textContent = cart.length;
+    const total = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+    cartCountSpan.textContent = cart.reduce((acc, item) => acc + item.quantity, 0); // Número total de itens no carrinho
     cartTotalSpan.textContent = total.toFixed(2);
-    cartCountFooter.textContent = cart.length;
+    cartCountFooter.textContent = cart.reduce((acc, item) => acc + item.quantity, 0);
   }
 
   // Remove item do carrinho
@@ -153,8 +163,8 @@ document.addEventListener('DOMContentLoaded', function () {
       return;
     }
 
-    const total = cart.reduce((acc, item) => acc + item.price, 0);
-    const itemSummary = cart.map(item => `${item.name} - R$${item.price.toFixed(2)}`).join('\n');
+    const total = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+    const itemSummary = cart.map(item => `${item.name} (${item.quantity}x) - R$${(item.price * item.quantity).toFixed(2)}`).join('\n');
     const message = `Resumo do pedido:\n\n${itemSummary}\n\nTotal: R$${total.toFixed(2)}\n\nEndereço: ${address}, ${bairro}, ${cidade}\n\nObrigado pela compra!`;
 
     // Envia o resumo para o WhatsApp
