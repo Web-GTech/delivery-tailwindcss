@@ -40,11 +40,11 @@ document.addEventListener('DOMContentLoaded', function () {
   // Função para verificar horário de funcionamento e exibir alerta
   function checkStatus() {
     if (isStoreOpen()) {
-      statusTarja.classList.remove("bg-red-500");
-      statusTarja.classList.add("bg-green-600");
+      statusTarja.classList.remove("bg-red-500  px-4 py-1 rounded-lg mt-2");
+      statusTarja.classList.add("bg-green-600  px-4 py-1 rounded-lg mt-2");
     } else {
-      statusTarja.classList.remove("bg-green-600");
-      statusTarja.classList.add("bg-red-500");
+      statusTarja.classList.remove("bg-green-600  px-4 py-1 rounded-lg mt-2");
+      statusTarja.classList.add("bg-red-500  px-4 py-1 rounded-lg mt-2");
 
       // Exibe alerta de loja fechada
       Toastify({
