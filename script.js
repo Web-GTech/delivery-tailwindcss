@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const paymentOptions = document.getElementById('payment-options');
   const statusTarja = document.getElementById('status-tarja');
   const addressForm = document.getElementById('checkout-form');
+  const workingHoursDisplay = document.getElementById('working-hours-display'); // Novo elemento para status de horário
 
   // MODAL DE ALERTA
   const alertModal = document.getElementById('alert-modal');
@@ -39,11 +40,13 @@ document.addEventListener('DOMContentLoaded', function () {
   // Função para verificar horário de funcionamento e exibir alerta
   function checkStatus() {
     if (isStoreOpen()) {
-      statusTarja.classList.remove("bg-red-500");
+      statusTarja.classList.remove("bg-red-600");
       statusTarja.classList.add("bg-green-600");
+      workingHoursDisplay.innerHTML = '<span class="bg-green-600 text-white px-4 py-1 rounded">Loja aberta</span>';
     } else {
-      statusTarja.classList.remove("bg-red-600")
-      statusTarja.classList.add("bg-green-600")
+      statusTarja.classList.remove("bg-green-600");
+      statusTarja.classList.add("bg-red-600");
+      workingHoursDisplay.innerHTML = '<span class="bg-red-600 text-white px-4 py-1 rounded">Seg á Dom - 15:00 às 22:00</span>';
     
       // Exibe alerta usando Toastify
       Toastify({
@@ -67,7 +70,14 @@ document.addEventListener('DOMContentLoaded', function () {
     button.addEventListener('click', () => {
       const name = button.getAttribute('data-name');
       const price = parseFloat(button.getAttribute('data-price'));
-      cart.push({ name, price });
+
+      // Verifica se o item já está no carrinho
+      const existingItem = cart.find(item => item.name === name);
+      if (existingItem) {
+        existingItem.quantity += 1; // Incrementa a quantidade
+      } else {
+        cart.push({ name, price, quantity: 1 }); // Adiciona novo item
+      }
       updateCartDisplay();
     });
   });
@@ -77,11 +87,11 @@ document.addEventListener('DOMContentLoaded', function () {
     cartItemsContainer.innerHTML = '';
     cart.forEach((item, index) => {
       const li = document.createElement('li');
-      li.innerHTML = `<span>${item.name} - R$ ${item.price.toFixed(2)}</span>
+      li.innerHTML = `<span>${item.name} - R$ ${item.price.toFixed(2)} (x${item.quantity})</span>
         <button class="text-red-500 ml-2" onclick="removeFromCart(${index})">&times;</button>`;
       cartItemsContainer.appendChild(li);
     });
-    const total = cart.reduce((acc, item) => acc + item.price, 0);
+    const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
     cartCountSpan.textContent = cart.length;
     cartTotalSpan.textContent = total.toFixed(2);
     cartCountFooter.textContent = cart.length;
@@ -151,8 +161,8 @@ document.addEventListener('DOMContentLoaded', function () {
       return;
     }
 
-    const total = cart.reduce((acc, item) => acc + item.price, 0);
-    const itemSummary = cart.map(item => `${item.name} - R$${item.price.toFixed(2)}`).join('\n');
+    const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+    const itemSummary = cart.map(item => `${item.name} - R$${item.price.toFixed(2)} (x${item.quantity})`).join('\n');
     const message = `Resumo do pedido:\n\n${itemSummary}\n\nTotal: R$${total.toFixed(2)}\n\nEndereço: ${address}, ${bairro}, ${cidade}\n\nObrigado pela compra!`;
 
     // Envia o resumo para o WhatsApp
