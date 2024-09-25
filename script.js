@@ -14,7 +14,6 @@ document.addEventListener('DOMContentLoaded', function () {
   const cartCountFooter = document.getElementById('cart-count-footer');
   const paymentOptions = document.getElementById('payment-options');
   const statusTarja = document.getElementById('status-tarja');
-  const addressForm = document.getElementById('checkout-form');
   const workingHoursDisplay = document.getElementById('working-hours-display'); // Novo elemento para status de horário
 
   // MODAL DE ALERTA
