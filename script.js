@@ -42,8 +42,8 @@ document.addEventListener('DOMContentLoaded', function () {
       statusTarja.innerHTML = '<span class="bg-green-600 text-white px-4 py-1 rounded">Loja aberta</span>';
     } else {
       // Altera a cor de fundo para vermelho quando a loja está fechada
-      statusTarja.innerHTML = '<span class="bg-red-600 text-white px-4 py-1 rounded">Seg á Dom - 15:00 ás 22:00</span>';
-      
+      statusTarja.innerHTML = '<span class="bg-red-600 text-white px-4 py-1 rounded">Seg á Dom - 15:00 às 22:00</span>';
+
       // Exibe alerta usando Toastify
       Toastify({
         text: "A loja está fechada. Volte mais tarde!",
