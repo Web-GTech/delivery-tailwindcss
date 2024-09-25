@@ -15,7 +15,6 @@ document.addEventListener('DOMContentLoaded', function () {
   const paymentOptions = document.getElementById('payment-options');
   const statusTarja = document.getElementById('status-tarja');
   const addressForm = document.getElementById('checkout-form');
-  const spanItem = document.getElementById("date-span");
 
   // MODAL DE ALERTA
   const alertModal = document.getElementById('alert-modal');
@@ -25,58 +24,36 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Horário de funcionamento
   const workingDays = ['segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado', 'domingo'];
-  const openHour = 18; // 18:00
-  const closeHour = 22; // 22:00
+  const openHour = 22; // 15:00
+  const closeHour = 00; // 22:00
 
   // Função para verificar se a loja está aberta
-  function verificarHorario() {
-    const agora = new Date();
-    const diaDaSemana = agora.getDay(); // 0 (Domingo) a 6 (Sábado)
-    const horaAtual = agora.getHours();
+  function isStoreOpen() {
+    const now = new Date();
+    const day = now.toLocaleString('pt-BR', { weekday: 'long' }).toLowerCase(); // Garantir minúsculas
+    const hour = now.getHours();
 
-    // Verifica se estamos em um dia da semana (Seg a Dom) e dentro do horário de funcionamento
-    const aberto = (diaDaSemana >= 1 && diaDaSemana <= 5) || (diaDaSemana === 0 || diaDaSemana === 6);
-    const dentroHorario = horaAtual >= openHour && horaAtual < closeHour;
+    return workingDays.includes(day) && hour >= openHour && hour < closeHour;
+  }
 
-    // Atualiza o background baseado no horário
-    if (aberto && dentroHorario) {
-      document.body.classList.remove('bg-gray-100'); // remove o fundo normal
-      document.body.classList.add('bg-green-200'); // muda para um fundo de aberto
-      statusTarja.innerText = 'Aberto';
-      statusTarja.classList.add('bg-green-600'); // fundo verde para aberto
+  // Função para verificar horário de funcionamento e exibir alerta
+  function checkStatus() {
+    if (isStoreOpen()) {
+      statusTarja.innerHTML = '<span class="bg-green-600 text-white px-4 py-1 rounded">Loja aberta</span>';
     } else {
-      document.body.classList.remove('bg-green-200'); // remove o fundo de aberto
-      document.body.classList.add('bg-red-200'); // muda para um fundo de fechado
-      statusTarja.innerText = 'Fechado';
-      statusTarja.classList.remove('bg-green-600'); // remove fundo verde
-      statusTarja.classList.add('bg-red-600'); // fundo vermelho para fechado
+      statusTarja.innerHTML = '<span class="bg-red-600 text-white px-4 py-1 rounded">Seg á Dom - 15:00 ás 22:00</span>';
 
-      // Exibe alerta se a loja estiver fechada
+      // Exibe alerta usando Toastify
       Toastify({
         text: "A loja está fechada. Volte mais tarde!",
         duration: 6000,
-        gravity: "top",
-        position: "right",
+        gravity: "top", // `top` or `bottom`
+        position: "right", // `left`, `center`, or `right`
         stopOnFocus: true,
         style: {
           background: "#ef4444",
         }
       }).showToast();
-    }
-  }
-
-  // Chama a função ao carregar a página
-  window.onload = verificarHorario;
-
-  // Função para verificar o status do restaurante
-  function checkStatus() {
-    const isOpen = verificarHorario();
-    if (isOpen) {
-      spanItem.classList.remove("bg-red-600");
-      spanItem.classList.add("bg-green-600");
-    } else {
-      spanItem.classList.remove("bg-green-600");
-      spanItem.classList.add("bg-red-600");
     }
   }
 
@@ -148,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function () {
       Toastify({
         text: "A loja está fechada no momento. Tente novamente mais tarde!",
         duration: 6000,
-        gravity: "top",
+        gravity: "top", 
         position: "right",
         style: {
           background: "#ef4444",
