@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function () {
     } else {
       statusTarja.classList.remove("bg-red-600")
       statusTarja.classList.add("bg-green-600")
-    }
+    
       // Exibe alerta usando Toastify
       Toastify({
         text: "A loja está fechada. Volte mais tarde!",
