@@ -16,9 +16,9 @@
       <h1 class="text-4xl mt-4 mb-2 font-bold text-white">Ambugr Dev</h1>
       <span class="text-white font-medium">Rua Baependi n28</span>
       <div class="bg-green-600 px-4 py-1 rounded-lg mt-2">
-        <span class="text-white font-medium" id="date-span">Seg á Dom - 18:00 as 22:00</span>
+        <span class="text-white font-medium " id="Open">Seg á Dom - 18:00 as 22:00</span>
       </div>
-      <div id="status-tarja" class="pulse text-white px-4 py-1 rounded-lg mt-2"></div>
+      <div id="status-tarja" class="pulse  text-white px-4 py-1 rounded-lg mt-2"></div>
     </div>
   </header>
   
@@ -121,23 +121,61 @@
       <ul id="cart-itens" class="list-none p-0 mb-4 space-y-2"></ul>
       <p class="text-lg font-medium mb-2">Total: R$ <span id="cart-total">0.00</span></p>
       <p class="text-sm text-gray-400 mb-4">Itens no Carrinho: <span id="cart-count">0</span></p>
-      <h3 class="text-lg font-semibold mb-2">Formas de Pagamento</h3>
-      <select id="payment-method" class="w-full bg-gray-700 border border-gray-600 rounded-lg p-2">
-        <option value="cartao">Cartão de Crédito</option>
+      <h3 class="text-lg font-semibold mb-2">Escolha a forma de pagamento:</h3>
+      <select id="payment-options" class="w-full p-2 mb-4 bg-gray-700 border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-green-500">
         <option value="dinheiro">Dinheiro</option>
+        <option value="cartao">Cartão</option>
+        <option value="pix">Pix</option>
       </select>
-      <button id="finalizar-pedido-btn" class="mt-4 bg-green-600 hover:bg-green-700 px-4 py-2 rounded">Finalizar Pedido</button>
+      <div id="change-input" class="hidden mb-4">
+        <label for="troco" class="block text-sm mb-1">Troco para quanto?</label>
+        <input type="number" id="troco" class="w-full p-2 bg-gray-700/80 border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Digite o valor">
+      </div>
+      <div id="address-form" class="mb-4">
+        <h3 class="text-lg font-semibold mb-2">Cadastro de Endereço:</h3>
+        <form id="checkout-form" class="space-y-2">
+          <input type="text" id="address" placeholder="Endereço" required class="w-full p-2 bg-gray-700/70 border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-green-500" />
+          <input type="text" id="bairro" placeholder="Bairro" required class="w-full p-2 bg-gray-700/70 border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-green-500" />
+          <input type="text" id="cidade" placeholder="Cidade" required class="w-full p-2 bg-gray-700 border/70 border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-green-500" />
+          <button id="checkout-btn" type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Finalizar Pedido</button>
+          
+        </form>
+      </div>
     </div>
   </div>
-  
- <!-- FOOTER -->
- <footer class="w-full bg-red-600 py-2 sticky bottom-0 z-50 flex items-center justify-center">
-  <button id="cart-btn" class="flex items-center gap-2 text-white font-bold">
-    (<span id="cart-count-footer">0</span>) Veja meu carrinho
-    <i class="fa fa-cart-plus text-lg"></i>
-  </button>
-</footer>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-<script src="script.js"></script> 
+
+  <!-- MODAL DE SUCESSO -->
+  <div id="success-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden">
+    <div class="bg-zinc-800 text-white p-6 rounded-lg w-11/12 max-w-md relative">
+      <button id="close-success-modal" class="absolute top-3 right-3 text-gray-400 hover:text-white">&times;</button>
+      <h2 class="text-2xl font-semibold mb-4">Pedido Finalizado!</h2>
+      <p class="mb-2">Seu pedido foi enviado com sucesso.</p>
+      <p class="text-lg font-medium">Total: R$ <span id="final-total">0.00</span></p>
+      <button id="close-success-modal-btn" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Fechar</button>
+    </div>
+  </div>
+  <!-- MODAL DE ALERTA -->
+<div id="alert-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden">
+  <div class="bg-zinc-800 text-white p-6 rounded-lg w-11/12 max-w-md relative">
+    <button id="close-alert-modal-btn" class="absolute top-3 right-3 text-gray-400 hover:text-white">&times;</button>
+    <div class="flex items-center mb-4">
+      <i class="fas fa-exclamation-triangle text-yellow-400 mr-2"></i>
+      <h2 class="text-2xl font-semibold">Atenção!</h2>
+    </div>
+    <p id="alert-message" class="mb-4"></p>
+    <button id="alert-ok-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">OK</button>
+  </div>
+</div>
+
+
+  <!-- FOOTER -->
+  <footer class="w-full bg-red-600 py-2 sticky bottom-0 z-50 flex items-center justify-center">
+    <button id="cart-btn" class="flex items-center gap-2 text-white font-bold">
+      (<span id="cart-count-footer">0</span>) Veja meu carrinho
+      <i class="fa fa-cart-plus text-lg"></i>
+    </button>
+  </footer>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  <script src="script.js"></script> 
 </body>
 </html>

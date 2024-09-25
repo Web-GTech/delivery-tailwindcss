@@ -24,8 +24,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Horário de funcionamento
   const workingDays = ['segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado', 'domingo'];
-  const openHour = 15; // 15:00
-  const closeHour = 22; // 22:00
+  const openHour = 22; // 15:00
+  const closeHour = 00; // 22:00
 
   // Função para verificar se a loja está aberta
   function isStoreOpen() {
@@ -39,17 +39,18 @@ document.addEventListener('DOMContentLoaded', function () {
   // Função para verificar horário de funcionamento e exibir alerta
   function checkStatus() {
     if (isStoreOpen()) {
-      statusTarja.innerHTML = '<span class="bg-green-600 text-white px-4 py-1 rounded">Loja aberta</span>';
+      statusTarja.classList.remove("bg-red-500");
+      statusTarja.classList.add("bg-green-600");
     } else {
-      // Altera a cor de fundo para vermelho quando a loja está fechada
-      statusTarja.innerHTML = '<span class="bg-red-600 text-white px-4 py-1 rounded">Seg á Dom - 15:00 às 22:00</span>';
-
+      statusTarja.classList.remove("bg-red-600")
+      statusTarja.classList.add("bg-green-600")
+    }
       // Exibe alerta usando Toastify
       Toastify({
         text: "A loja está fechada. Volte mais tarde!",
         duration: 6000,
-        gravity: "top", // `top` ou `bottom`
-        position: "right", // `left`, `center`, ou `right`
+        gravity: "top", // `top` or `bottom`
+        position: "right", // `left`, `center`, or `right`
         stopOnFocus: true,
         style: {
           background: "#ef4444",
@@ -188,4 +189,4 @@ document.addEventListener('DOMContentLoaded', function () {
     if (e.target === successModal) successModal.classList.add('hidden');
     if (e.target === alertModal) alertModal.classList.add('hidden');
   });
-})
+});
