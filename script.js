@@ -40,10 +40,12 @@ document.addEventListener('DOMContentLoaded', function () {
   function checkStatus() {
     if (isStoreOpen()) {
       statusTarja.classList.remove("bg-red-500");
-      statusTarja.classList.add("bg-green-600");
+      statusTarja.classList.add("bg-green-600", "p-2", "mx-4", "rounded-lg");
     } else {
       statusTarja.classList.remove("bg-green-600");
-      statusTarja.classList.add("bg-red-500");
+      statusTarja.classList.add("bg-red-500", "p-2", "mx-4", "rounded-lg");
+    }
+    
 
       // Exibe alerta de loja fechada
       Toastify({
