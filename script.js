@@ -24,15 +24,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Horário de funcionamento
   const workingDays = ['segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado', 'domingo'];
-  const openHour = 22; // 15:00
-  const closeHour = 00; // 22:00
+  const openHour = 22; // 22:00
+  const closeHour = 0;  // 00:00 (meia-noite)
 
   // Função para verificar se a loja está aberta
   function isStoreOpen() {
     const now = new Date();
-    const day = now.toLocaleString('pt-BR', { weekday: 'long' }).toLowerCase(); // Garantir minúsculas
+    const day = now.toLocaleString('pt-BR', { weekday: 'long' }).toLowerCase(); // Nome do dia da semana em minúsculas
     const hour = now.getHours();
 
+    // Se a hora for menor que a hora de fechamento e maior ou igual à de abertura
     return workingDays.includes(day) && hour >= openHour && hour < closeHour;
   }
 
@@ -44,15 +45,13 @@ document.addEventListener('DOMContentLoaded', function () {
     } else {
       statusTarja.classList.remove("bg-green-600");
       statusTarja.classList.add("bg-red-500");
-    }
-  }
 
-      // Exibe alerta usando Toastify
+      // Exibe alerta de loja fechada
       Toastify({
         text: "A loja está fechada. Volte mais tarde!",
         duration: 6000,
-        gravity: "top", // `top` or `bottom`
-        position: "right", // `left`, `center`, or `right`
+        gravity: "top", // `top` ou `bottom`
+        position: "right", // `left`, `center`, ou `right`
         stopOnFocus: true,
         style: {
           background: "#ef4444",
@@ -83,6 +82,7 @@ document.addEventListener('DOMContentLoaded', function () {
         <button class="text-red-500 ml-2" onclick="removeFromCart(${index})">&times;</button>`;
       cartItemsContainer.appendChild(li);
     });
+
     const total = cart.reduce((acc, item) => acc + item.price, 0);
     cartCountSpan.textContent = cart.length;
     cartTotalSpan.textContent = total.toFixed(2);
@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', function () {
       Toastify({
         text: "A loja está fechada no momento. Tente novamente mais tarde!",
         duration: 6000,
-        gravity: "top", 
+        gravity: "top",
         position: "right",
         style: {
           background: "#ef4444",
