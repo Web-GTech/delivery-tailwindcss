@@ -1,164 +1,67 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Amburgueria</title>
-  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hamburgueria</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.0/Toastify.min.css">
+    <link rel="stylesheet" href="styles.css"> <!-- Seu arquivo CSS aqui -->
 </head>
-<body class="bg-gray-100">
-  <!-- HEADER -->
-  <header class="w-full h-[420px] bg-zinc-900 bg-cover bg-center" style="background-image: url('./assets/bg.png')">
-    <div class="w-full h-full flex flex-col justify-center items-center">
-      <img src="./assets/hamb-1.png" alt="Logo DevBurg" class="w-32 h-32 rounded-full shadow-lg hover:scale-110 duration-200" />
-      <h1 class="text-4xl mt-4 mb-2 font-bold text-white">Ambugr Dev</h1>
-      <span class="text-white font-medium">Rua Baependi n28</span>
-      <div class="bg-green-600 px-4 py-1 rounded-lg mt-2" id="working-hours-display">
-        <span class="text-white font-medium" id="status-tarja">Seg a Dom - 18:00 as 22:00</span>
-      </div>
-    </div>
-  </header>
-  
-  <h2 class="text-2xl md:text-3xl font-bold text-center mt-9 mb-6">Conheça nosso menu</h2>
+<body>
+    <div id="app">
+        <!-- Seus botões de adicionar ao carrinho -->
+        <button class="add-to-cart-btn" data-name="Hamburguer Simples" data-price="15.00">Adicionar ao Carrinho</button>
+        <button class="add-to-cart-btn" data-name="Batata Frita" data-price="8.00">Adicionar ao Carrinho</button>
+        
+        <!-- Botão do carrinho -->
+        <button id="cart-btn">Carrinho (<span id="cart-count">0</span>)</button>
 
-  <!-- INICIO MENU -->
-  <main class="grid grid-cols-1 md:grid-cols-2 gap-7 mx-auto max-w-7xl p-4" id="menu">
-    <!-- HAMBURGUERES -->
-    <div class="flex gap-2 bg-white p-4 rounded-md shadow-md">
-      <img src="./assets/hamb-2.png" alt="Cheeseburger Clássico" class="w-28 h-28 rounded-md hover:scale-110 hover:-rotate-2 duration-300">
-      <div class="flex-1">
-        <p class="font-bold">Cheeseburger Clássico</p>
-        <p class="text-sm">O tradicional, com queijo derretido e molho especial.</p>
-        <div class="flex items-center justify-between mt-3">
-          <p class="font-bold text-lg">R$ 15.00</p>
-          <button class="bg-gray-900 text-white px-5 py-2 rounded add-to-cart-btn" data-name="Cheeseburger Clássico" data-price="15.00">
-            <i class="fa fa-cart-plus text-lg"></i>
-          </button>
+        <!-- MODAL DO CARRINHO -->
+        <div id="modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden">
+            <div class="bg-white text-black p-6 rounded-lg w-11/12 max-w-md relative">
+                <button id="close-modal-btn" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600">&times;</button>
+                <h2 class="text-xl font-semibold mb-4">Carrinho</h2>
+                <ul id="cart-itens" class="mb-4"></ul>
+                <p>Total: R$ <span id="cart-total">0.00</span></p>
+                <p class="mb-2">Quantidade: <span id="cart-count-footer">0</span></p>
+                <form id="checkout-form" class="mt-4">
+                    <input type="text" id="address" placeholder="Endereço" class="w-full p-2 mb-2 rounded"/>
+                    <input type="text" id="bairro" placeholder="Bairro" class="w-full p-2 mb-2 rounded"/>
+                    <input type="text" id="cidade" placeholder="Cidade" class="w-full p-2 mb-2 rounded"/>
+                    <select id="payment-options" class="mb-4">
+                        <option value="dinheiro">Dinheiro</option>
+                        <option value="cartao">Cartão de Crédito</option>
+                        <option value="pix">Pix</option>
+                    </select>
+                    <button id="checkout-btn" class="bg-green-600 px-4 py-2 rounded">Finalizar Pedido</button>
+                </form>
+            </div>
         </div>
-      </div>
-    </div>
 
-    <div class="flex gap-2 bg-white p-4 rounded-md shadow-md">
-      <img src="./assets/hamb-3.png" alt="Bacon Lover" class="w-28 h-28 rounded-md hover:scale-110 hover:-rotate-2 duration-300">
-      <div class="flex-1">
-        <p class="font-bold">Bacon Lover</p>
-        <p class="text-sm">Para os fãs de bacon, com uma dose extra desse sabor irresistível.</p>
-        <div class="flex items-center justify-between mt-3">
-          <p class="font-bold text-lg">R$ 20.00</p>
-          <button class="bg-gray-900 text-white px-5 py-2 rounded add-to-cart-btn" data-name="Bacon Lover" data-price="20.00">
-            <i class="fa fa-cart-plus text-lg"></i>
-          </button>
+        <!-- MODAL DE SUCESSO -->
+        <div id="success-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden">
+            <div class="bg-white text-black p-6 rounded-lg w-11/12 max-w-md relative">
+                <button id="close-success-modal-btn" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600">&times;</button>
+                <h2 class="text-xl font-semibold mb-4">Pedido Finalizado</h2>
+                <p>Total: R$ <span id="final-total">0.00</span></p>
+            </div>
         </div>
-      </div>
-    </div>
 
-    <div class="flex gap-2 bg-white p-4 rounded-md shadow-md">
-      <img src="./assets/hamb-7.png" alt="Duplo Smash" class="w-28 h-28 rounded-md hover:scale-110 hover:-rotate-2 duration-300">
-      <div class="flex-1">
-        <p class="font-bold">Duplo Smash</p>
-        <p class="text-sm">Dois discos de carne suculenta, queijo e muito sabor.</p>
-        <div class="flex items-center justify-between mt-3">
-          <p class="font-bold text-lg">R$ 25.00</p>
-          <button class="bg-gray-900 text-white px-5 py-2 rounded add-to-cart-btn" data-name="Duplo Smash" data-price="25.00">
-            <i class="fa fa-cart-plus text-lg"></i>
-          </button>
+        <!-- MODAL DE ALERTA -->
+        <div id="alert-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden">
+            <div class="bg-white text-black p-6 rounded-lg w-11/12 max-w-md relative">
+                <button id="close-alert-modal-btn" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600">&times;</button>
+                <p id="alert-message"></p>
+                <button id="alert-ok-btn" class="bg-blue-600 px-4 py-2 rounded mt-4">OK</button>
+            </div>
         </div>
-      </div>
+
+        <div id="working-hours-display"></div>
+        <div id="status-tarja" class="fixed top-0 left-0 right-0 text-center p-2 text-white"></div>
     </div>
 
-    <div class="flex gap-2 bg-white p-4 rounded-md shadow-md">
-      <img src="./assets/hamb-5.png" alt="Veggie Burger" class="w-28 h-28 rounded-md hover:scale-110 hover:-rotate-2 duration-300">
-      <div class="flex-1">
-        <p class="font-bold">Veggie Burger</p>
-        <p class="text-sm">Uma opção deliciosa e saudável, com ingredientes 100% vegetais.</p>
-        <div class="flex items-center justify-between mt-3">
-          <p class="font-bold text-lg">R$ 22.00</p>
-          <button class="bg-gray-900 text-white px-5 py-2 rounded add-to-cart-btn" data-name="Veggie Burger" data-price="22.00">
-            <i class="fa fa-cart-plus text-lg"></i>
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- BEBIDAS -->
-    <div class="flex gap-2 bg-white p-4 rounded-md shadow-md">
-      <img src="./assets/refri-2.png" alt="Refrigerante" class="w-28 h-28 rounded-md hover:scale-110 hover:-rotate-2 duration-300">
-      <div class="flex-1">
-        <p class="font-bold">Guaraná</p>
-        <p class="text-sm">Gelado e refrescante, perfeito para acompanhar seu lanche.</p>
-        <div class="flex items-center justify-between mt-3">
-          <p class="font-bold text-lg">R$ 5.00</p>
-          <button class="bg-gray-900 text-white px-5 py-2 rounded add-to-cart-btn" data-name="Refrigerante" data-price="5.00">
-            <i class="fa fa-cart-plus text-lg"></i>
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <div class="flex gap-2 bg-white p-4 rounded-md shadow-md">
-      <img src="./assets/refri-1.png" alt="Refrigerante" class="w-28 h-28 rounded-md hover:scale-110 hover:-rotate-2 duration-300">
-      <div class="flex-1">
-        <p class="font-bold">Coca-cola</p>
-        <p class="text-sm">Gelado e refrescante, perfeito para acompanhar seu lanche.</p>
-        <div class="flex items-center justify-between mt-3">
-          <p class="font-bold text-lg">R$ 5.00</p>
-          <button class="bg-gray-900 text-white px-5 py-2 rounded add-to-cart-btn" data-name="Refrigerante" data-price="5.00">
-            <i class="fa fa-cart-plus text-lg"></i>
-          </button>
-        </div>
-      </div>
-    </div>
-  </main>
-  
-  <!-- MODAL DO CARRINHO -->
-  <div id="modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden">
-    <div class="bg-zinc-800 text-white p-6 rounded-lg w-11/12 max-w-md relative">
-      <button id="close-modal-btn" class="absolute top-3 right-3 text-gray-400 hover:text-white">&times;</button>
-      <h2 class="text-2xl font-semibold mb-4">Carrinho</h2>
-      <ul id="cart-itens" class="list-none p-0 mb-4 space-y-2"></ul>
-      <p class="text-lg font-medium mb-2">Total: R$ <span id="cart-total">0.00</span></p>
-      <p class="text-sm mb-2">Quantidade: <span id="cart-count">0</span></p>
-      <form id="checkout-form" class="mt-4">
-        <input type="text" id="address" placeholder="Endereço" class="w-full p-2 mb-2 rounded"/>
-        <input type="text" id="bairro" placeholder="Bairro" class="w-full p-2 mb-2 rounded"/>
-        <input type="text" id="cidade" placeholder="Cidade" class="w-full p-2 mb-2 rounded"/>
-        <select id="payment-options" class="mb-4">
-          <option value="dinheiro">Dinheiro</option>
-          <option value="cartao">Cartão de Crédito</option>
-          <option value="pix">Pix</option>
-        </select>
-        <button id="checkout-btn" class="bg-green-600 px-4 py-2 rounded">Finalizar Pedido</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- MODAL DE SUCESSO -->
-  <div id="success-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden">
-    <div class="bg-green-600 text-white p-6 rounded-lg w-11/12 max-w-md relative">
-      <button id="close-success-modal" class="absolute top-3 right-3 text-gray-200 hover:text-white">&times;</button>
-      <h2 class="text-2xl font-semibold mb-4">Pedido Finalizado</h2>
-      <p>Seu pedido foi finalizado com sucesso!</p>
-      <p>Total: R$ <span id="final-total">0.00</span></p>
-      <button id="close-success-modal-btn" class="bg-white text-green-600 px-4 py-2 rounded mt-4">Fechar</button>
-    </div>
-  </div>
-
-  <!-- MODAL DE ALERTA -->
-  <div id="alert-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden">
-    <div class="bg-gray-800 text-white p-6 rounded-lg w-11/12 max-w-md relative">
-      <button id="close-alert-modal-btn" class="absolute top-3 right-3 text-gray-400 hover:text-white">&times;</button>
-      <h2 class="text-xl font-semibold mb-4">Atenção!</h2>
-      <p id="alert-message">Mensagem de alerta.</p>
-      <button id="alert-ok-btn" class="bg-white text-gray-800 px-4 py-2 rounded mt-4">OK</button>
-    </div>
-  </div>
-
-  <div id="cart-btn" class="fixed bottom-4 right-4 bg-green-600 text-white p-3 rounded-full shadow-lg cursor-pointer hover:bg-green-700 transition duration-300">
-    <i class="fa fa-shopping-cart"></i>
-  </div>
-
-  <script src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.0/Toastify.min.js"></script>
+    <script src="script.js"></script> <!-- Seu arquivo JavaScript aqui -->
 </body>
 </html>
