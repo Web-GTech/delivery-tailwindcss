@@ -6,22 +6,14 @@ document.addEventListener('DOMContentLoaded', function () {
   const cartItemsContainer = document.getElementById('cart-itens');
   const cartCountSpan = document.getElementById('cart-count');
   const cartTotalSpan = document.getElementById('cart-total');
-  const checkoutBtn = document.getElementById('checkout-btn');
+  const checkoutBtn = document.getElementById('finalize-order-btn');
   const successModal = document.getElementById('success-modal');
   const finalTotalSpan = document.getElementById('final-total');
-  const closeSuccessModal = document.getElementById('close-success-modal');
   const closeSuccessModalBtn = document.getElementById('close-success-modal-btn');
   const cartCountFooter = document.getElementById('cart-count-footer');
-  const paymentOptions = document.getElementById('payment-options');
+  const paymentOptions = document.getElementById('payment-method');
   const statusTarja = document.getElementById('status-tarja');
-  const addressForm = document.getElementById('checkout-form');
   const workingHoursDisplay = document.getElementById('working-hours-display'); // Novo elemento para status de horário
-
-  // MODAL DE ALERTA
-  const alertModal = document.getElementById('alert-modal');
-  const alertMessage = document.getElementById('alert-message');
-  const closeAlertModalBtn = document.getElementById('close-alert-modal-btn');
-  const alertOkBtn = document.getElementById('alert-ok-btn');
 
   // Horário de funcionamento
   const workingDays = ['segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado', 'domingo'];
@@ -87,8 +79,8 @@ document.addEventListener('DOMContentLoaded', function () {
     cartItemsContainer.innerHTML = '';
     cart.forEach((item, index) => {
       const li = document.createElement('li');
-      li.innerHTML = <span>${item.name} - R$ ${item.price.toFixed(2)} (x${item.quantity})</span>
-        <button class="text-red-500 ml-2" onclick="removeFromCart(${index})">&times;</button>;
+      li.innerHTML = `<span>${item.name} - R$ ${item.price.toFixed(2)} (x${item.quantity})</span>
+        <button class="text-red-500 ml-2" onclick="removeFromCart(${index})">&times;</button>`;
       cartItemsContainer.appendChild(li);
     });
     const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
@@ -111,15 +103,6 @@ document.addEventListener('DOMContentLoaded', function () {
   // Fecha o modal do carrinho
   closeModalBtn.addEventListener('click', () => {
     modal.classList.add('hidden');
-  });
-
-  // Fecha o modal do pedido finalizado
-  closeSuccessModal.addEventListener('click', () => {
-    successModal.classList.add('hidden');
-  });
-
-  closeSuccessModalBtn.addEventListener('click', () => {
-    successModal.classList.add('hidden');
   });
 
   // Função para mostrar alertas
@@ -162,11 +145,11 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
-    const itemSummary = cart.map(item => ${item.name} - R$${item.price.toFixed(2)} (x${item.quantity})).join('\n');
-    const message = Resumo do pedido:\n\n${itemSummary}\n\nTotal: R$${total.toFixed(2)}\n\nEndereço: ${address}, ${bairro}, ${cidade}\n\nObrigado pela compra!;
+    const itemSummary = cart.map(item => `${item.name} - R$ ${item.price.toFixed(2)} (x${item.quantity})`).join('\n');
+    const message = `Resumo do pedido:\n\n${itemSummary}\n\nTotal: R$ ${total.toFixed(2)}\n\nEndereço: ${address}, ${bairro}, ${cidade}\n\nObrigado pela compra!`;
 
     // Envia o resumo para o WhatsApp
-    const whatsappUrl = https://wa.me/?text=${encodeURIComponent(message)};
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl);
 
     // Exibe o modal de sucesso e limpa o carrinho
@@ -182,15 +165,6 @@ document.addEventListener('DOMContentLoaded', function () {
     if (this.value === 'pix') {
       showAlert("Chave Pix: <strong>picpayultra@gmail.com</strong> <i class='fas fa-money-bill-wave text-green-400'></i>");
     }
-  });
-
-  // Fechar modal de alerta
-  closeAlertModalBtn.addEventListener('click', () => {
-    alertModal.classList.add('hidden');
-  });
-
-  alertOkBtn.addEventListener('click', () => {
-    alertModal.classList.add('hidden');
   });
 
   // Fecha o modal ao clicar fora dele
